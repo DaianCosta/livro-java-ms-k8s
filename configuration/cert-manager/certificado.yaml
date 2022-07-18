@@ -1,0 +1,11 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: letsencrypt-confrariadocodigotecnologia-com-cert
+spec:
+  secretName: confrariadocodigotecnologia-com-secret
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+  dnsNames:
+    - "k8s.confrariadocodigotecnologia.com"

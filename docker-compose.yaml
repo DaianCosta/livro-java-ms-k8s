@@ -1,0 +1,55 @@
+version: "3.5"
+
+services:
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: dev
+      POSTGRES_PASSWORD: postgres
+
+  product:
+    image: desenvolvimentodaian/product-api
+    build:
+      context: ./product-api/
+      dockerfile: .
+    ports:
+      - "8071:8081"
+    environment:
+      POSTGRES_URL: jdbc:postgresql://postgres:5432/dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    depends_on:
+      - postgres
+
+  user:
+    image: desenvolvimentodaian/user-api
+    build:
+      context: ./user-api/
+      dockerfile: .
+    ports:
+      - "8070:8080"
+    environment:
+      POSTGRES_URL: jdbc:postgresql://postgres:5432/dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    depends_on:
+      - postgres
+
+  shopping:
+    image: desenvolvimentodaian/shopping-api
+    build:
+      context: ./shopping-api/
+      dockerfile: .
+    ports:
+      - "8072:8082"
+    environment:
+      POSTGRES_URL: jdbc:postgresql://postgres:5432/dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PRODUCT_API_URL: localhost:8081
+      USER_API_URL: localhost:8080
+    depends_on:
+      - postgres

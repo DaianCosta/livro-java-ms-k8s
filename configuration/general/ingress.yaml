@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gateway-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+
+spec:
+  tls:
+    - hosts:
+        - k8s.confrariadocodigotecnologia.com
+
+      secretName: confrariadocodigotecnologia-com-secret
+  rules:
+    - host: k8s.confrariadocodigotecnologia.com
+      http:
+        paths:
+          - path: /user/
+            pathType: Prefix
+            backend:
+              service:
+                name: user-api
+                port:
+                  number: 8080
+          - path: /product/
+            pathType: Prefix
+            backend:
+              service:
+                name: product-api
+                port:
+                  number: 8081
+          - path: /shopping/
+            pathType: Prefix
+            backend:
+              service:
+                name: shopping-api
+                port:
+                  number: 8082
